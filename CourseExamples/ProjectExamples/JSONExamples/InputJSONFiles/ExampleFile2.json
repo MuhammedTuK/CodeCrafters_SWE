@@ -1,0 +1,44 @@
+{
+  "people": [
+    {
+      "name": "Alice",
+      "favorite": "Blue"
+    },
+    {
+      "name": "Bob",
+      "favorite": "Green"
+    },
+    {
+      "name": "Charlie",
+      "favorite": "Red"
+    },
+    {
+      "name": "David",
+      "favorite": "Yellow"
+    },
+    {
+      "name": "Eva",
+      "favorite": "Purple"
+    },
+    {
+      "name": "Frank",
+      "favorite": "Orange"
+    },
+    {
+      "name": "Grace",
+      "favorite": "Pink"
+    },
+    {
+      "name": "Henry",
+      "favorite": "Brown"
+    },
+    {
+      "name": "Ivy",
+      "favorite": "Turquoise"
+    },
+    {
+      "name": "Jack",
+      "favorite": "Black"
+    }
+  ]
+}
