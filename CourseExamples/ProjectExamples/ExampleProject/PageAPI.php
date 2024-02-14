@@ -128,7 +128,7 @@ function getRandomValue(){
 
 // Make this a variable
 	// https://l3harriscourseexamples.onrender.com/ProjectExamples/RandomAPI.php?action=get_RandomValue
-	$extRandomURL = "https://courseexamplespage.onrender.com/CourseExamples/ProjectExamples/RandomAPI.php?action=get_RandomValue"; // make this a global variable
+	$extRandomURL = "https://l3harriscourseexamples.onrender.com/ProjectExamples/RandomAPI.php?action=get_RandomValue"; // make this a global variable
 	$content = file_get_contents($extRandomURL);
 	$result  = json_decode($content);
 	return $result;
