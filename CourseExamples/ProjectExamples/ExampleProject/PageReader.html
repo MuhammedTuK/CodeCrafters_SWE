@@ -14,18 +14,18 @@
 -->
 
 
-<h1>Example "Random" API Page</h1>
+<h1>Example API Page</h1>
 
-<p>This page is randomly constructed using API values. If you refresh the page, you will notice that the values in the drop down list and paragraph section randomly change. These are driven by an external API that draws the values from a random number API.</p>
+<p>This page is constructed using API values.</p>
 
 
-<h4>Random Dropdown information</h4>
-    <select id="sel">
+<h4>Students Names Dropdown</h4>
+    <select id="sel" onchange="loadPageInformation();">
         <option value="">-- Select --</option>
     </select>
 
 
-<h4>Random Paragraph Information</h4>
+<h4>Student's Team</h4>
     <p id="msg"></p>
 
 
@@ -45,7 +45,7 @@
 
 
 
-<button onclick="loadPageInformation()">Reload Page Information</button>
+<button onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
 </body>
 
 <script>
@@ -68,9 +68,9 @@ function loadDropDownInformation(){
 }
 
 
-function loadParagraphInformation(){
+function loadParagraphInformation(sel){
 //var i = 0;
-	var url = "PageAPI.php?id=paragraphInfo";
+	var url = "PageAPI.php?id=paragraphInfo&sel="+sel;
 	//var url = "http://localhost:8000/ProjectExamples/ExampleProject/inputFiles/dropDownListNHL.json";
 
 	$.getJSON(url, function (data) {
@@ -82,17 +82,28 @@ function loadParagraphInformation(){
 function loadPageInformation(){
 
 	document.getElementById('msg').innerHTML = ""; // clear the paragraph information
+	//document.getElementById('sel').options.length = 0;// clear the dropdown list information information
+
+	// Call functions to load the page information
+	//loadDropDownInformation();
+	loadParagraphInformation(document.getElementById('sel').value);
+
+}
+
+function loadPageInformationOnStartUp(){
+
+	document.getElementById('msg').innerHTML = ""; // clear the paragraph information
 	document.getElementById('sel').options.length = 0;// clear the dropdown list information information
 
 	// Call functions to load the page information
 	loadDropDownInformation();
-	loadParagraphInformation();
+	loadParagraphInformation(0);
 
 }
 
 
  $(document).ready(function () {
-		loadPageInformation(); // Call the primary function to load all of the page information
+	loadPageInformationOnStartUp(); // Call the primary function to load all of the page information
  });
 
 
