@@ -1,5 +1,5 @@
 {
-    "type": "DropDownList",
+    "type": "List",
     "dropdownOptions": [
     { "value": "1", "label": "Alpha" },
     { "value": "2", "label": "CodeCrafters" },
