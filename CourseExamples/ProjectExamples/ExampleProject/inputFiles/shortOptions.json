@@ -1,8 +1,0 @@
-{
-  "type": "OptionList",
-  "values": {
-    "opt1": "Yes",
-    "opt2": "No",
-    "opt3": "Maybe"
-  }
-}
