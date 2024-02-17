@@ -36,7 +36,7 @@
 <select id="sel" onchange="loadPageInformation();">
     <option value="">-- Select --</option>
 </select>
-<h4>Student's Team</h4>
+<h4>Student's Team:</h4>
 <p id="msg"></p>
 <button onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
 
@@ -54,7 +54,7 @@
     }
 
     function loadParagraphInformation(sel){
-        var url = "PageAPI.php?id=paragraphInfo&sel="+sel;
+        var url = "PageAPI.php?id=paragraphInfo";
         $.getJSON(url, function (data) {
             $.each(data.dropdownOptions, function (index, value) {
                 if(value.value == sel){
