@@ -1,6 +1,6 @@
 {
     "type": "List",
-    "dropdownOptions": [
+    "list": [
     { "value": "1", "label": "Alpha" },
     { "value": "2", "label": "CodeCrafters" },
     { "value": "3", "label": "Tigers" },

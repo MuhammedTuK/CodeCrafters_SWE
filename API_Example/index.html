@@ -4,85 +4,206 @@
     <title>Project Page</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 70vh;
-            margin: 0;
+        #selctionMsg, #radioMsg {
+            min-height: 20px; /* Adjust the height as needed */
         }
-
-        p, h4, select, #msg {
-            text-align: center;
-            font-size: 1.7em; /* Increase font size by 2 */
+        #txtSplit {
+            min-height: 50px; /* Adjust the height as needed */
         }
-		h1 {
-            text-align: center;
-            font-size: 3em; /* Increase font size by 2 */
-        }
-		#msg {
-			color: brown;
-			font-style: bold;
-			font-size: 40px;
-		}
     </style>
 </head>
 
 <body>
     
-<h1>Students Info. Page</h1>
-<h4>Select a student Name:</h4>
-<select id="sel" onchange="loadPageInformation();">
-    <option value="">-- Select --</option>
-</select>
-<h4>Student's Team:</h4>
-<p id="msg"></p>
-<button onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
+    <h1>Students Info. Page</h1>
 
-<script>
+    <div>
+        <label for="selectionSwitch"> Switch selection type</label>
+        <input type="checkbox" id="selectionSwitch" name="selectionSwitch" value="selectionSwitch"><br><br>        
+    </div>
+    
+    <div class="col#1">
+        Select student name:<br>
+        <select id="dropdownSel" onchange="updateDropdownParagraph('dropdownSelection', $('#dropdownSel').val());">
+            <option value="">-- Select --</option>
+        </select>
+        <br><br>Student's Team: 
+        <p id="selctionMsg"></p>
+    </div>    
 
-    function loadDropDownInformation(){
-        var url = "PageAPI.php?id=dropdown";
+    <div class="col#2">
+        Select student name:
+        <div class="radioContainer" id="radioContainer"></div>
+        <br>Student's Team:
+        <p id="radioMsg"></p>
+    </div>    
 
-        $.getJSON(url, function (data) {
-            $.each(data.dropdownOptions, function (index, value) {
-                
-                $('#sel').append('<option value="' + value.value + '">' + value.label + '</option>');
+    <div class="col#3">
+        <label for="name">Write any words:</label>
+        <input type="text" id="txtboxSplit" name="split" size="20"/>
+        <button onclick="splitWords()">submit</button>
+        <p id="txtSplit"></p>
+    </div>
+
+    <div class="col#4">
+        Student image:<br>
+        <img id="studentImg" width="300" height="400">
+    </div>
+
+    <button onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
+
+    <script>
+
+        function loadStudentsListformation(){
+            var url = "PageAPI.php?id=dropdown";
+
+            $.getJSON(url, function (data) {
+                $.each(data.dropdownOptions, function (index, value) {                    
+                    $('#dropdownSel').append('<option value="' + value.value + '">' + value.label + '</option>');                    
+                    if(value.value != 0){                                        
+                        $('#radioContainer').append('<input type="radio" name="studentRadio" value="' + value.value + '">' + value.label + '<br>');
+                    }
+                });
+
+                // Get all radio buttons by their name
+                const radioButtons = document.querySelectorAll('input[name="studentRadio"]');
+                // Loop through each radio button and add an event listener
+                radioButtons.forEach(radioButton => {
+                    radioButton.addEventListener('change', (event) => {
+                        // When any radio button is selected, this code will execute
+                        updateDropdownParagraph("radioSelection", event.target.value);
+                    });
+                });
+
+                selectionCtrl(false);
             });
-        });
-    }
+        }
 
-    function loadParagraphInformation(sel){
-        var url = "PageAPI.php?id=paragraphInfo";
-        $.getJSON(url, function (data) {
-            $.each(data.dropdownOptions, function (index, value) {
-                if(value.value == sel){
-                    $('#msg').append(value.label);
-                }
+        function loadParagraphInformation(selected, outputSel){
+            var url = "PageAPI.php?id=paragraphInfo";
+            $.getJSON(url, function (data) {
+                $.each(data.list, function (index, value) {
+                    if(value.value == selected){
+                        if(outputSel == "dropdownInfo"){
+                            $('#selctionMsg').append(value.label);
+                        }
+                        else if(outputSel == "radioInfo"){
+                            $('#radioMsg').append(value.label);
+                        }                   
+                    }
+                });
             });
+        }
+
+        function loadImgInformation(selected){            
+            var imageElement = document.getElementById('studentImg');
+            imageElement.width = "300"; 
+            imageElement.height = "400";
+
+            if      (selected == 1) { imgSrc = "inputFiles/abdulatif.jpg"}
+            else if (selected == 2) { imgSrc = "inputFiles/dawsari.jpg"}
+            else if (selected == 3) { imgSrc = "inputFiles/johani.jpg"}
+            else if (selected == 4) { imgSrc = "inputFiles/otaibi.jpg"}
+            else if (selected == 5) { imgSrc = "inputFiles/shahrani.jpg"}
+            /*else if (selected == 6) { imgSrc = "inputFiles/tukhays.jpg"}*/
+            else if (selected == 7) { imgSrc = "inputFiles/zhrani.jpg"}            
+            else if (selected == 8) { imgSrc = "inputFiles/ghadi.jpg"}
+            else {
+                imgSrc = "inputFiles/empty.png"
+                imageElement.width = "300"; 
+                imageElement.height = "400"; 
+            }            
+            imageElement.src = imgSrc;
+        }
+
+        function disableRadios() {
+            var radios = document.getElementById('radioContainer').querySelectorAll('input[type="radio"]');
+            radios.forEach(function(radio) {
+                radio.disabled = true;
+            });
+        }
+        function enableRadios() {
+            var radios = document.getElementById('radioContainer').querySelectorAll('input[type="radio"]');
+            radios.forEach(function(radio) {
+                radio.disabled = false;
+            });
+        }
+
+        function selectionCtrl(checked)
+        {
+            if (checked) {
+                document.getElementById("dropdownSel").disabled = true;
+                enableRadios();
+            } else {
+                document.getElementById("dropdownSel").disabled = false;
+                disableRadios();
+            }
+        }
+
+        // Get the checkbox element
+        const checkbox = document.getElementById('selectionSwitch');
+        // Add event listener for 'change' event
+        checkbox.addEventListener('change', function() {            
+            selectionCtrl(this.checked);
         });
-    }
 
-    function loadPageInformation(){
-        document.getElementById('msg').innerHTML = ""; // clear the paragraph information
+        function updateDropdownParagraph(selctor, value){
+            if (selctor == "dropdownSelection"){
+                $('#selctionMsg').empty(); // clear the paragraph information     
+                // Call functions to load the page information           
+                loadParagraphInformation(value, "dropdownInfo");
+            }
+            else if(selctor == "radioSelection"){
+                $('#radioMsg').empty(); // clear the paragraph information     
+                // Call functions to load the page information           
+                loadParagraphInformation(value, "radioInfo");
+            }
+            loadImgInformation(value);
+        }
 
-        // Call functions to load the page information
-        loadParagraphInformation(document.getElementById('sel').value);
-    }
+        function splitWords() {
+            // Get the input value
+            var inputText = document.getElementById('txtboxSplit').value;
+            // Split the input text into an array of words
+            var wordsArray = inputText.split(/\s+/);
+            // Get the txtSplit paragraph element
+            var txtSplit = document.getElementById('txtSplit');
+            // Clear the existing content
+            txtSplit.innerHTML = '';
+            // Loop through the words array and append each word to txtSplit
+            wordsArray.forEach(function(word) {
+                // Create a new span element for each word
+                var wordSpan = document.createElement('span');
+                // Set the text content of the span to the current word
+                wordSpan.textContent = word;
+                // Append the span to txtSplit
+                txtSplit.appendChild(wordSpan);
+                // Create a line break element
+                var lineBreak = document.createElement('br');
+                // Append the line break after each word
+                txtSplit.appendChild(lineBreak);
+            });
+        }
 
-    function loadPageInformationOnStartUp(){
-        document.getElementById('msg').innerHTML = ""; // clear the paragraph information
-        document.getElementById('sel').options.length = 0;// clear the dropdown list information information
+        function loadPageInformationOnStartUp(){
+            
+            $('#selctionMsg').empty(); // clear the paragraph information
+            $('#radioMsg').empty(); // clear the paragraph information
+            $('#dropdownSel').empty();// clear the dropdown list information information
+            $('#radioContainer').empty(); // clear the radio button container
+            $('#txtSplit').empty(); // clear the Split txtbox
+            loadImgInformation(0);
+            document.getElementById('selectionSwitch').checked = false;
 
-        // Call functions to load the page information
-        loadDropDownInformation();
-        loadParagraphInformation(0);
-    }
+            // Call functions to load the page information
+            loadStudentsListformation();
+        }
 
-    $(document).ready(function () {
-        loadPageInformationOnStartUp(); // Call the primary function to load all of the page information
-    });
-</script>
+        $(document).ready(function () {
+            loadPageInformationOnStartUp(); // Call the primary function to load all of the page information
+        });
+
+    </script>
+
 </body>
 </html>
