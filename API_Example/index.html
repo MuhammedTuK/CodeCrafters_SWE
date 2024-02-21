@@ -37,7 +37,7 @@
 
         h1 {
             text-align: center;
-            color: #109501; /* Header color */
+            color: #009327; /* Header color */
             margin-bottom: 20px;
         }
 
@@ -88,6 +88,11 @@
             min-height: 20px; /* Adjust the height as needed */
         }
 
+        .label-color {
+            color: rgb(10, 148, 0); /* Change the color to your desired color */
+            font-size: larger;
+        }
+
         .reload-button {
             position: absolute;
             top: 20px;
@@ -104,9 +109,12 @@
 <body>
     <h1>Students Information Page</h1>
 
+    <hr>
+
     <div class="checkbox-container">
+        <br>
         <input type="checkbox" id="selectionSwitch" name="selectionSwitch" value="selectionSwitch">
-        <label for="selectionSwitch">Switch Selector Type</label><br><br><br>
+        <label for="selectionSwitch" class="label-color">Switch Selector Type</label><br><br>
     </div>
 
     <div class="container">
