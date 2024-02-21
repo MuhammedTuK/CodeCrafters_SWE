@@ -2,56 +2,155 @@
 <html>
 <head>
     <title>Project Page</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #e0e0e0;
+            color: #333; /* Text color */
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .column-container {
+            margin-bottom: 20px;
+        }
+
+        .column {
+            flex: 1;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+        }
+
+        .checkbox-container {
+            margin-left: 220px; /* Add a left margin */
+        }
+
+        h1 {
+            text-align: center;
+            color: #444; /* Header color */
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #666; /* Label color */
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        input[type="text"],
+        select {
+            width: calc(100% - 22px); /* Full width - padding */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+        }
+
         #selctionMsg, #radioMsg {
             min-height: 20px; /* Adjust the height as needed */
         }
-        #txtSplit {
-            min-height: 50px; /* Adjust the height as needed */
+
+        .reload-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .disabled-container {
+            opacity: 0.5; /* Dim the container */
+            pointer-events: none; /* Disable pointer events */
         }
     </style>
 </head>
 
 <body>
-    
     <h1>Students Info. Page</h1>
 
-    <div>
-        <label for="selectionSwitch"> Switch selection type</label>
-        <input type="checkbox" id="selectionSwitch" name="selectionSwitch" value="selectionSwitch"><br><br>        
-    </div>
-    
-    <div class="col#1">
-        Select student name:<br>
-        <select id="dropdownSel" onchange="updateDropdownParagraph('dropdownSelection', $('#dropdownSel').val());">
-            <option value="">-- Select --</option>
-        </select>
-        <br><br>Student's Team: 
-        <p id="selctionMsg"></p>
-    </div>    
-
-    <div class="col#2">
-        Select student name:
-        <div class="radioContainer" id="radioContainer"></div>
-        <br>Student's Team:
-        <p id="radioMsg"></p>
-    </div>    
-
-    <div class="col#3">
-        <label for="name">Write any words:</label>
-        <input type="text" id="txtboxSplit" name="split" size="20"/>
-        <button onclick="splitWords()">submit</button>
-        <p id="txtSplit"></p>
+    <div class="checkbox-container">
+        <input type="checkbox" id="selectionSwitch" name="selectionSwitch" value="selectionSwitch">
+        <label for="selectionSwitch">Switch Selector Type</label><br><br><br>
     </div>
 
-    <div class="col#4">
-        Student image:<br>
-        <img id="studentImg" width="300" height="400">
+    <div class="container">
+        <div class="column-container" id="dropdownContainer">
+            <label>Select Student Name:</label>
+            <div class="column" style="background-color: #f9f9f9;">                
+                <select id="dropdownSel" onchange="updateDropdownParagraph('dropdownSelection', $('#dropdownSel').val());">
+                    <option value="">-- Select --</option>
+                </select>
+                <br><br>Student's Team: 
+                <p id="selctionMsg"></p>
+            </div>
+        </div>
+
+        <div class="column-container" id="radioSContainer">
+            <label>Select Student Name:</label>
+            <div class="column" style="background-color: #f5f5f5;">                
+                <div class="radioContainer" id="radioContainer"></div>
+                <br>Student's Team:
+                <p id="radioMsg"></p>
+            </div>
+        </div>
+
+        <div class="column-container">
+            <label>Student Photo:</label>
+            <div class="column" style="background-color: #f9f9f9;">
+                <img id="studentImg" width="300" height="400">
+            </div>
+        </div>
+
+        <div class="column-container">
+            <label>Split Function</label>
+            <div class="column" style="background-color: #f5f5f5;">
+                <label for="name">Write any sentence:</label>
+                <input type="text" id="txtboxSplit" name="split" size="10"/>
+                <button onclick="splitWords()">Submit</button>
+                <p id="txtSplit"></p>
+            </div>
+        </div>
     </div>
 
-    <button onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
+    <button class="reload-button" onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script>
 
         function loadStudentsListformation(){
@@ -116,27 +215,24 @@
             imageElement.src = imgSrc;
         }
 
-        function disableRadios() {
-            var radios = document.getElementById('radioContainer').querySelectorAll('input[type="radio"]');
-            radios.forEach(function(radio) {
-                radio.disabled = true;
-            });
+        function disableContainer(containerId) {
+            var container = document.getElementById(containerId);
+            container.classList.add('disabled-container');
         }
-        function enableRadios() {
-            var radios = document.getElementById('radioContainer').querySelectorAll('input[type="radio"]');
-            radios.forEach(function(radio) {
-                radio.disabled = false;
-            });
+
+        function enableContainer(containerId) {
+            var container = document.getElementById(containerId);
+            container.classList.remove('disabled-container');
         }
 
         function selectionCtrl(checked)
         {
             if (checked) {
-                document.getElementById("dropdownSel").disabled = true;
-                enableRadios();
+                disableContainer('dropdownContainer'); // To disable the container
+                enableContainer('radioSContainer'); // To enable the container
             } else {
-                document.getElementById("dropdownSel").disabled = false;
-                disableRadios();
+                disableContainer('radioSContainer'); // To disable the container
+                enableContainer('dropdownContainer'); // To enable the container
             }
         }
 
@@ -192,8 +288,9 @@
             $('#dropdownSel').empty();// clear the dropdown list information information
             $('#radioContainer').empty(); // clear the radio button container
             $('#txtSplit').empty(); // clear the Split txtbox
-            loadImgInformation(0);
+            document.getElementById('txtboxSplit').value ="";
             document.getElementById('selectionSwitch').checked = false;
+            loadImgInformation(0);
 
             // Call functions to load the page information
             loadStudentsListformation();
