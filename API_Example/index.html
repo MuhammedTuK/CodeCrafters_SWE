@@ -102,7 +102,7 @@
 </head>
 
 <body>
-    <h1>Students Info. Page</h1>
+    <h1>Students Information Page</h1>
 
     <div class="checkbox-container">
         <input type="checkbox" id="selectionSwitch" name="selectionSwitch" value="selectionSwitch">
@@ -116,7 +116,7 @@
                 <select id="dropdownSel" onchange="updateDropdownParagraph('dropdownSelection', $('#dropdownSel').val());">
                     <option value="">-- Select --</option>
                 </select>
-                <br><br>Student's Team: 
+                <br><h4>Student's Team:</h4> 
                 <p id="selctionMsg"></p>
             </div>
         </div>
@@ -125,7 +125,7 @@
             <label>Select Student Name:</label>
             <div class="column" style="background-color: #f5f5f5;">                
                 <div class="radioContainer" id="radioContainer"></div>
-                <br>Student's Team:
+                <br><h4>Student's Team:</h4> 
                 <p id="radioMsg"></p>
             </div>
         </div>
@@ -143,6 +143,7 @@
                 <label for="name">Write any sentence:</label>
                 <input type="text" id="txtboxSplit" name="split" size="10"/>
                 <button onclick="splitWords()">Submit</button>
+                <br><h4>Output:</h4>
                 <p id="txtSplit"></p>
             </div>
         </div>
