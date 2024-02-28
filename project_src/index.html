@@ -448,8 +448,6 @@
             for (var i = 0; i < table.rows.length; i++) {
                 var studentName = table.rows[i].cells[0].innerText.trim();
                 var studentValue = table.rows[i].getAttribute("data-value"); // Retrieve the value associated with the student
-                console.log(studentValue);
-                console.log(studentName);
                 students.push({ value: studentValue, label: studentName });
             }
             
