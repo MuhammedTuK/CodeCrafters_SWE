@@ -2,497 +2,96 @@
 <html>
 <head>
     <title>Project Page</title>
-    <style>
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5; /* Light gray background */
-            color: #333; /* Text color */
-        }
-
-        .rit-logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            max-width: 100px; /* Adjust the size of the logo */
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .column-container {
-            margin-bottom: 20px;
-        }
-
-        .column {
-            flex: 1;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 20px;
-            box-sizing: border-box;
-            border-radius: 5px; /* Rounded corners */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
-        }
-
-        .checkbox-container {
-            margin-left: 220px; /* Add a left margin */
-        }
-
-        h1 {
-            text-align: center;
-            color: #fe7700; /* RIT orange */
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            color: #666; /* Label color */
-        }
-
-        button {
-            background-color: #ff7700; /* RIT orange */
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 20px;
-            cursor: pointer;
-            border-radius: 5px; /* Rounded corners */
-            transition: background-color 0.3s ease; /* Smooth transition */
-        }
-
-        .small-btn {
-            padding: 5px 10px;
-            font-size: 12px;
-            margin: auto;
-        }
-
-        button:hover {
-            background-color: #ff7b00; /* Darker orange on hover */
-        }
-
-        input[type="text"],
-        select {
-            width: calc(100% - 22px); /* Full width - padding */
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            box-sizing: border-box;
-        }
-
-        img {
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px; /* Rounded corners */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
-        }
-
-        #rosterTable {
-            margin-top: 20px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        #selctionMsg,
-        #radioMsg {
-            min-height: 20px; /* Adjust the height as needed */
-        }
-
-        .label-color {
-            color: #ff7f0f; /* RIT orange */
-            font-size: larger;
-        }
-
-        #rosterTable tbody tr:not(:last-child) td {
-            border-bottom: 1px solid #ddd; /* Add a border-bottom to all rows except the last one */
-        }
-
-        .reload-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
-        .disabled-container {
-            opacity: 0.5; /* Dim the container */
-            pointer-events: none; /* Disable pointer events */
-        }
-
-        hr {
-            border: none; /* Remove default border */
-            border-top: 3px double #686868; /* Add double border on the top */
-            margin-top: 60px; /* Adjust the margin as needed */
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <img class="rit-logo" src="inputFiles/rit.png" alt="RIT Logo">
+    <header>
+        <img class="rit-logo" src="inputFiles/rit.png" alt="RIT Logo">
+        <h1>Students Information Page</h1>
+        <hr>
+        <button class="reload-button" onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
+    </header>
 
-    <h1>Students Information Page</h1>
+    <main>
 
-    <hr>
-
-    <div class="checkbox-container">
-        <br>
-        <input type="checkbox" id="selectionSwitch" name="selectionSwitch" value="selectionSwitch">
-        <label for="selectionSwitch" class="label-color">Switch Selector Type</label><br><br>
-    </div>
-
-    <div class="container">
-        <div class="column-container" id="dropdownContainer">
-            <label>Select Student Name:</label>
-            <div class="column" style="background-color: #f9f9f9;">                
-                <select id="dropdownSel" onchange="updateDropdownParagraph('dropdownSelection', $('#dropdownSel').val());">
-                    <option value="0">-- Select --</option>
-                </select>
-                <br><h4>Student's Team:</h4> 
-                <p id="selctionMsg"></p>
+        <div class="checkbox-container">
+            <br>
+            <input type="checkbox" id="selectionSwitch" name="selectionSwitch" value="selectionSwitch">
+            <label for="selectionSwitch" class="label-color">Switch Selector Type</label><br><br>
+        </div>
+    
+        <div class="container">
+            <div class="column-container" id="dropdownContainer">
+                <label>Select Student Name:</label>
+                <div class="column" style="background-color: #f9f9f9;">                
+                    <select id="dropdownSel" onchange="updateDropdownParagraph('dropdownSelection', $('#dropdownSel').val());">
+                        <option value="0">-- Select --</option>
+                    </select>
+                    <br><h4>Student's Team:</h4> 
+                    <p id="selctionMsg"></p>
+                </div>
+            </div>
+    
+            <div class="column-container" id="radioSContainer">
+                <label>Select Student Name:</label>
+                <div class="column" style="background-color: #f5f5f5;">                
+                    <div class="radioContainer" id="radioContainer"></div>
+                    <br><h4>Student's Team:</h4> 
+                    <p id="radioMsg"></p>
+                </div>
+            </div>
+    
+            <div class="column-container">
+                <label>Student Photo:</label>
+                <div class="column" style="background-color: #f9f9f9;">
+                    <img id="studentImg" width="300" height="400">
+                </div>
+            </div>
+    
+            <div class="column-container">
+                <label>Split Function</label>
+                <div class="column" style="background-color: #f5f5f5;">
+                    <label for="name">Write any sentence:</label>
+                    <input type="text" id="txtboxSplit" name="split" size="5"/>
+                    <button onclick="splitWords()">Submit</button>
+                    <br><h4>Output:</h4>
+                    <p id="txtSplit"></p>
+                </div>
+            </div>
+    
+            <div class="column-container">
+                <label>Editable Student Table</label>
+                <div class="column">
+                    <button onclick="addStudent()">Add Student</button>
+                    <button onclick="saveTable()">Save Table</button>
+                    <button onclick="resetTable()">Reset Table</button>
+    
+                    <table id="rosterTable">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows for students will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="column-container" id="radioSContainer">
-            <label>Select Student Name:</label>
-            <div class="column" style="background-color: #f5f5f5;">                
-                <div class="radioContainer" id="radioContainer"></div>
-                <br><h4>Student's Team:</h4> 
-                <p id="radioMsg"></p>
-            </div>
-        </div>
+    </main>
 
-        <div class="column-container">
-            <label>Student Photo:</label>
-            <div class="column" style="background-color: #f9f9f9;">
-                <img id="studentImg" width="300" height="400">
-            </div>
-        </div>
-
-        <div class="column-container">
-            <label>Split Function</label>
-            <div class="column" style="background-color: #f5f5f5;">
-                <label for="name">Write any sentence:</label>
-                <input type="text" id="txtboxSplit" name="split" size="5"/>
-                <button onclick="splitWords()">Submit</button>
-                <br><h4>Output:</h4>
-                <p id="txtSplit"></p>
-            </div>
-        </div>
-
-        <div class="column-container">
-            <label>Editable Student Table</label>
-            <div class="column">
-                <button onclick="addStudent()">Add Student</button>
-                <button onclick="saveTable()">Save Table</button>
-                <button onclick="resetTable()">Reset Table</button>
-
-                <table id="rosterTable">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Rows for students will be added dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <button class="reload-button" onclick="loadPageInformationOnStartUp()">Reload Page Information</button>
+    <footer>
+        <p>CodeCrafter Webpage</p>
+    </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script>
-
-        function loadStudentsListformation(){
-            var url = "PageAPI.php?id=dropdown";
-
-            $.getJSON(url, function (data) {
-                //dropdown header
-                $('#dropdownSel').append('<option value="0"> Select </option>');  
-                $.each(data.dropdownOptions, function (index, value) {  
-                    var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];                  
-                    $('#dropdownSel').append('<option value="' + value.value + '">' + value.label + '</option>');                    
-                    //load the table rows
-                    var newRow = table.insertRow(-1);
-                    var cell1 = newRow.insertCell(0);
-                    var cell2 = newRow.insertCell(1);
-                    cell1.textContent = value.label;
-                    newRow.setAttribute("data-value", value.value);
-                    cell2.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
-                    //load the dropdownlist
-                    $('#radioContainer').append('<input type="radio" name="studentRadio" value="' + value.value + '">' + value.label + '<br>');
-                });
-
-                // Get all radio buttons by their name
-                const radioButtons = document.querySelectorAll('input[name="studentRadio"]');
-                // Loop through each radio button and add an event listener
-                radioButtons.forEach(radioButton => {
-                    radioButton.addEventListener('change', (event) => {
-                        // When any radio button is selected, this code will execute
-                        updateDropdownParagraph("radioSelection", event.target.value);
-                    });
-                });
-
-                selectionCtrl(false);
-            });
-        }
-
-        function resetTable() {
-            var url = "PageAPI.php?id=resetTable";
-
-            clearTable();
-
-            $.getJSON(url, function (data) {
-                $.each(data.dropdownOptions, function (index, value) {  
-                    var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];                  
-                    //load the table rows
-                    var newRow = table.insertRow(-1);
-                    var cell1 = newRow.insertCell(0);
-                    var cell2 = newRow.insertCell(1);
-                    cell1.textContent = value.label;
-                    newRow.setAttribute("data-value", value.value);
-                    cell2.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
-                });
-
-                saveTable();
-            });
-        }
-
-        function loadParagraphInformation(selected, outputSel){
-            var url = "PageAPI.php?id=paragraphInfo";
-            $.getJSON(url, function (data) {
-                $.each(data.list, function (index, value) {
-                    if(value.value == selected){
-                        if(outputSel == "dropdownInfo"){
-                            $('#selctionMsg').append(value.label);
-                        }
-                        else if(outputSel == "radioInfo"){
-                            $('#radioMsg').append(value.label);
-                        }                   
-                    }
-                });
-            });
-        }
-
-        function loadImgInformation(selected){            
-            var imageElement = document.getElementById('studentImg');
-            imageElement.width = "300"; 
-            imageElement.height = "400";
-
-            if      (selected == 1) { imgSrc = "inputFiles/abdulatif.jpg"}
-            else if (selected == 2) { imgSrc = "inputFiles/dawsari.jpg"}
-            else if (selected == 3) { imgSrc = "inputFiles/johani.jpg"}
-            else if (selected == 4) { imgSrc = "inputFiles/otaibi.jpg"}
-            else if (selected == 5) { imgSrc = "inputFiles/shahrani.jpg"}
-            /*else if (selected == 6) { imgSrc = "inputFiles/tukhays.jpg"}*/
-            else if (selected == 7) { imgSrc = "inputFiles/zhrani.jpg"}            
-            else if (selected == 8) { imgSrc = "inputFiles/ghadi.jpg"}
-            else {
-                imgSrc = "inputFiles/empty.png"
-                imageElement.width = "300"; 
-                imageElement.height = "400"; 
-            }            
-            imageElement.src = imgSrc;
-        }
-
-        function disableContainer(containerId) {
-            var container = document.getElementById(containerId);
-            container.classList.add('disabled-container');
-        }
-
-        function enableContainer(containerId) {
-            var container = document.getElementById(containerId);
-            container.classList.remove('disabled-container');
-        }
-
-        function selectionCtrl(checked)
-        {
-            if (checked) {
-                disableContainer('dropdownContainer'); // To disable the container
-                enableContainer('radioSContainer'); // To enable the container
-            } else {
-                disableContainer('radioSContainer'); // To disable the container
-                enableContainer('dropdownContainer'); // To enable the container
-            }
-        }
-
-        // Get the checkbox element
-        const checkbox = document.getElementById('selectionSwitch');
-        // Add event listener for 'change' event
-        checkbox.addEventListener('change', function() {            
-            selectionCtrl(this.checked);
-        });
-
-        function updateDropdownParagraph(selctor, value){
-            if (selctor == "dropdownSelection"){
-                $('#selctionMsg').empty(); // clear the paragraph information     
-                // Call functions to load the page information           
-                loadParagraphInformation(value, "dropdownInfo");
-            }
-            else if(selctor == "radioSelection"){
-                $('#radioMsg').empty(); // clear the paragraph information     
-                // Call functions to load the page information           
-                loadParagraphInformation(value, "radioInfo");
-            }
-            loadImgInformation(value);
-        }
-
-        function splitWords() {
-            // Get the input value
-            var inputText = document.getElementById('txtboxSplit').value;
-            // Split the input text into an array of words
-            var wordsArray = inputText.split(/\s+/);
-            // Get the txtSplit paragraph element
-            var txtSplit = document.getElementById('txtSplit');
-            // Clear the existing content
-            txtSplit.innerHTML = '';
-            // Loop through the words array and append each word to txtSplit
-            wordsArray.forEach(function(word) {
-                // Create a new span element for each word
-                var wordSpan = document.createElement('span');
-                // Set the text content of the span to the current word
-                wordSpan.textContent = word;
-                // Append the span to txtSplit
-                txtSplit.appendChild(wordSpan);
-                // Create a line break element
-                var lineBreak = document.createElement('br');
-                // Append the line break after each word
-                txtSplit.appendChild(lineBreak);
-            });
-        }
-
-        function editRow(button) {
-            var row = button.parentNode.parentNode;
-            var cells = row.getElementsByTagName("td");
-            var cell = cells[0];
-            var input = document.createElement("input");
-            input.type = "text";
-            input.value = cell.innerHTML;
-            cell.innerHTML = "";
-            cell.appendChild(input);
-            
-            // Disable the edit button once clicked
-            button.disabled = true;
-        }
-
-        function removeRow(button) {
-            var row = button.parentNode.parentNode;
-            row.parentNode.removeChild(row);
-        }
-
-        function moveUp(button) {
-            var row = button.parentNode.parentNode;
-            var previousRow = row.previousElementSibling;
-            if (previousRow) {
-                row.parentNode.insertBefore(row, previousRow);
-            }
-        }
-
-        function moveDown(button) {
-            var row = button.parentNode.parentNode;
-            var nextRow = row.nextElementSibling;
-            if (nextRow) {
-                row.parentNode.insertBefore(nextRow, row);
-            }
-        }
-
-        function saveRow(button) {
-            var row = button.parentNode.parentNode;
-            var input = row.getElementsByTagName("input")[0];
-            var cell = row.getElementsByTagName("td")[0];
-            cell.innerHTML = input.value;
-            
-            // Enable the edit button after saving
-            var editButton = row.querySelector("button[onclick='editRow(this)']");
-            editButton.disabled = false;
-        }
-
-        function addStudent() {
-            var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];
-            var newRow = table.insertRow(-1);
-            var cell1 = newRow.insertCell(0);
-            var cell2 = newRow.insertCell(1);
-            newRow.setAttribute("data-value", table.rows.length);
-            cell1.innerHTML = "<input type='text'>";
-            cell2.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
-        }     
-
-        function saveTable() {
-            var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];
-            
-            // Save the row currently in edit mode, if any
-            var editButtons = table.querySelectorAll("button[onclick='editRow(this)']:disabled");
-            for (var i = 0; i < editButtons.length; i++) {
-                saveRow(editButtons[i]);
-            }
-            
-             // Prepare data to send to server
-            var students = [];
-            for (var i = 0; i < table.rows.length; i++) {
-                var studentName = table.rows[i].cells[0].innerText.trim();
-                var studentValue = table.rows[i].getAttribute("data-value"); // Retrieve the value associated with the student
-                students.push({ value: studentValue, label: studentName });
-            }
-            
-            // Send data to server using AJAX
-            $.ajax({
-                url: 'PageAPI.php', // Specify your server endpoint here
-                type: 'POST', // or 'PUT', depending on your server configuration
-                contentType: 'application/json',
-                data: JSON.stringify({ students: students }),
-                success: function(response) {
-                console.log("Students list saved successfully:", students);
-                loadPageInformationOnStartUp(); //re-load the page
-                },
-                error: function(xhr, status, error) {
-                console.error("Error saving students list:", error);
-                }
-            });
-        }
-
-        function clearTable() {
-            var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];
-            table.innerHTML = ""; // Clear all rows from the table
-        }
-        
-        function loadPageInformationOnStartUp(){
-            
-            $('#selctionMsg').empty(); // clear the paragraph information
-            $('#radioMsg').empty(); // clear the paragraph information
-            $('#dropdownSel').empty();// clear the dropdown list information information
-            $('#radioContainer').empty(); // clear the radio button container
-            $('#txtSplit').empty(); // clear the Split txtbox
-            document.getElementById('txtboxSplit').value ="";
-            document.getElementById('selectionSwitch').checked = false;
-            loadImgInformation(0);
-            clearTable();
-
-            // Call functions to load the page information
-            loadStudentsListformation();
-        }
-
-        $(document).ready(function () {
-            loadPageInformationOnStartUp(); // Call the primary function to load all of the page information
-        });
-
-    </script>
+    <script src="script.js"></script>
+    <script src="tableUtils.js"></script>
 
 </body>
 </html>

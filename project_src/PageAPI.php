@@ -14,10 +14,12 @@ function getDropDownInformationSNames()
 {
 	return readJSONFile("inputFiles/dropDownListStudents.json");
 }
+
 function getListInformationTeams()
 {
 	return readJSONFile("inputFiles/ListTeams.json");
 }
+
 function getOrigStudentNames()
 {
 	return readJSONFile("inputFiles/studentsSrc.json");
@@ -45,7 +47,7 @@ function getDropDownInformation($sel)
 function get_file_by_id($id)
 {
 	switch ($id) {
-		case "dropdown":
+		case "studentsList":
 			$jsonData = getDropDownInformation(1);
 			break;
 		case "paragraphInfo":
