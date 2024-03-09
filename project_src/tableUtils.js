@@ -8,7 +8,7 @@ function tablePopulate(index, value)
     nameCell.textContent = value.name;
     teamCell.textContent = value.team;
     newRow.setAttribute("data-photo", value.photo);
-    actionsCell.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
+    actionsCell.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this,1)'>Save</button>";
 }
 
 function editRow(button) {
@@ -53,7 +53,7 @@ function moveDown(button) {
     }
 }
 
-function saveRow(button) {
+function saveRow(button, save_all) {
     var row = button.parentNode.parentNode;
     var inputs = row.getElementsByTagName("input");
     var inputsLength = inputs.length;
@@ -71,8 +71,11 @@ function saveRow(button) {
     var editButton = row.querySelector("button[onclick='editRow(this)']");
     editButton.disabled = false;
 
-    // Save table to server
-    saveTable();
+    if(save_all == 1)
+    {
+        // Save table to server
+        saveTable();
+    }
 }
 
 function addStudent() {
@@ -84,7 +87,11 @@ function addStudent() {
     nameCell.innerHTML = "<input type='text'>";
     teamCell.innerHTML = "<input type='text'>";
     newRow.setAttribute("data-photo", "none.png");
-    actionsCell.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
+    actionsCell.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this,1)'>Save</button>";
+
+    // Disable the edit button for the newly added row
+    var editButton = newRow.querySelector("button[onclick='editRow(this)']");
+    editButton.disabled = true;
 }
 
 function saveTable() {
@@ -93,15 +100,13 @@ function saveTable() {
     // Save the row currently in edit mode, if any
     var editButtons = table.querySelectorAll("button[onclick='editRow(this)']:disabled");
     for (var i = 0; i < editButtons.length; i++) {
-        saveRow(editButtons[i]);
-    }
-    
+        saveRow(editButtons[i], 0);
+    }    
     // Prepare data to send to server
     var students = [];
     for (var i = 0; i < table.rows.length; i++) {
         var studentData = {};
-        var row = table.rows[i];
-        
+        var row = table.rows[i];        
         // Iterate over each cell in the row
         for (var j = 0; j < row.cells.length; j++) {
             studentData.index = i+1;
@@ -113,13 +118,10 @@ function saveTable() {
                 studentData.name = cellData;
             } else if (j === 1) {                
                 studentData.team = cellData;
-            }
-            // Add more conditions if you have additional cells with data
-            
+            }            
         }
         // add student photo file source
-        studentData.photo = row.getAttribute("data-photo");
-        
+        studentData.photo = row.getAttribute("data-photo");        
         // Push the student data to the array
         students.push({ data: studentData });
     }

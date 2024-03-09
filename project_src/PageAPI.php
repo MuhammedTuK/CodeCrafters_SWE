@@ -1,7 +1,22 @@
 <?php
-
 // The purpose of this API is to act as an intermediary to determing the json information to be returned by the example PageReader page.
-$jsonData = get_file_by_id($_GET["id"]);
+
+/*****************GET request**********************/
+// Call the function to get students info when the script receives a GET request
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+	get_file_by_id($_GET["id"]);
+}
+
+// The main function that drives the page
+function get_file_by_id($id)
+{
+	getStudentInfoJASON($id);
+}
+
+function getStudentInfoJASON($id)
+{
+	readJSONFile("inputFiles/$id.json");
+}
 
 function readJSONFile($url)
 {
@@ -9,55 +24,15 @@ function readJSONFile($url)
 	echo $JSON; // return the information to be read by the reader page
 }
 
-//  Start dropdown gathering information 
-function getDropDownInformationSNames()
-{
-	return readJSONFile("inputFiles/studentsInfo.json");
-}
-
-function getOrigStudentNames()
-{
-	return readJSONFile("inputFiles/studentsInfoBkup.json");
-}
-
-// If it is a dropdown list, take the sel value determine what the contents of the dropdown list should be
-function getDropDownInformation($sel)
-{
-	switch ($sel) {
-		case "1":
-			$jsonData = getDropDownInformationSNames();
-			break;
-		case "3":
-			$jsonData = getOrigStudentNames();
-			break;
-	}
-}
-
-// ----------------------- THE PRIMARY PAGE FUNCTIONS -----------------------
-
-// The main function that drives the page
-function get_file_by_id($id)
-{
-	switch ($id) {
-		case "studentsInfo":
-			$jsonData = getDropDownInformation(1);
-			break;
-		case "resetTable":
-			$jsonData = getDropDownInformation(3);
-			break;
-	}
+/*****************POST request**********************/
+// Call the function to save students Info when the script receives a POST request
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	saveStudentsInfo();
 }
 
 // Function to save students list
-function saveStudentsList()
+function saveStudentsInfo()
 {
-	// Check if the request method is POST
-	if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-		http_response_code(400); // Bad request
-		echo json_encode(array('error' => 'Invalid request method'));
-		return;
-	}
-
 	// Get the JSON data from the request body
 	$jsonString = file_get_contents('php://input');
 
@@ -93,9 +68,4 @@ function saveStudentsList()
 		http_response_code(500); // Internal server error
 		echo json_encode(array('error' => 'Failed to save students list'));
 	}
-}
-
-// Call the function to save students list when the script receives a POST request
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	saveStudentsList();
 }

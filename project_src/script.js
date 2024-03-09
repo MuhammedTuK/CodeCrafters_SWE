@@ -23,7 +23,7 @@ function loadStudentsListsInfo(reset)
     var url;
 
     if(reset == 1)
-        url = "PageAPI.php?id=resetTable";
+        url = "PageAPI.php?id=studentsInfoBkup";
     else
         url = "PageAPI.php?id=studentsInfo";
 
