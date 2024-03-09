@@ -83,6 +83,7 @@ function addStudent() {
     var actionsCell = newRow.insertCell(2);
     nameCell.innerHTML = "<input type='text'>";
     teamCell.innerHTML = "<input type='text'>";
+    newRow.setAttribute("data-photo", "none.png");
     actionsCell.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
 }
 
