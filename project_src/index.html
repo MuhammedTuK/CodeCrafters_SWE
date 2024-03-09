@@ -26,7 +26,7 @@
             <div class="column-container" id="dropdownContainer">
                 <label>Select Student Name:</label>
                 <div class="column" style="background-color: #f9f9f9;">                
-                    <select id="dropdownSel" onchange="updateDropdownParagraph('dropdownSelection', $('#dropdownSel').val());">
+                    <select id="dropdownSel" onchange="updateSelectedInfo('dropdownSelection', $('#dropdownSel').val());">
                         <option value="0">-- Select --</option>
                     </select>
                     <br><h4>Student's Team:</h4> 
@@ -72,6 +72,7 @@
                         <thead>
                             <tr>
                                 <th>Student Name</th>
+                                <th>Student Team</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

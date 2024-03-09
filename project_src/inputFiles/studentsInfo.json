@@ -1,0 +1,52 @@
+{
+    "studentsInfoTable": [
+        {
+            "index": 1,
+            "name": "Alabdullatif, Abdullah",
+            "team": "Alpha",
+            "photo": "abdallah.jpg"
+        },
+        {
+            "index": 2,
+            "name": "Aldawsari, Mohammed",
+            "team": "CodeCrafters",
+            "photo": "mohammed.jpg"
+        },
+        {
+            "index": 3,
+            "name": "Aljohni, Turki",
+            "team": "Tigers",
+            "photo": "turkey.jpg"
+        },
+        {
+            "index": 4,
+            "name": "Alotaibi, Osama",
+            "team": "Alpha",
+            "photo": "osama.jpg"
+        },
+        {
+            "index": 5,
+            "name": "Alshahrani, Muslh",
+            "team": "A-Team",
+            "photo": "musleh.jpg"
+        },
+        {
+            "index": 6,
+            "name": "Altukhays, Mohammed",
+            "team": "CodeCrafters",
+            "photo": "none.png"
+        },
+        {
+            "index": 7,
+            "name": "Alzahrani, Mohammed",
+            "team": "A-Team",
+            "photo": "zharani.jpg"
+        },
+        {
+            "index": 8,
+            "name": "Gadhi, Ryan",
+            "team": "Tigers",
+            "photo": "rayan.jpg"
+        }
+    ]
+}

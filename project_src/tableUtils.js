@@ -1,23 +1,32 @@
-function tablePopulate(value)
+function tablePopulate(index, value)
 {
     var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];
     var newRow = table.insertRow(-1);
-    var cell1 = newRow.insertCell(0);
-    var cell2 = newRow.insertCell(1);
-    cell1.textContent = value.label;
-    newRow.setAttribute("data-value", value.value);
-    cell2.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
+    var nameCell = newRow.insertCell(0);
+    var teamCell = newRow.insertCell(1);
+    var actionsCell = newRow.insertCell(2);
+    nameCell.textContent = value.name;
+    teamCell.textContent = value.team;
+    newRow.setAttribute("data-photo", value.photo);
+    actionsCell.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
 }
 
 function editRow(button) {
     var row = button.parentNode.parentNode;
     var cells = row.getElementsByTagName("td");
-    var cell = cells[0];
-    var input = document.createElement("input");
-    input.type = "text";
-    input.value = cell.innerHTML;
-    cell.innerHTML = "";
-    cell.appendChild(input);
+    
+    // Loop through each cell in the row
+    for (var i = 0; i < (cells.length-1); i++) {
+        var cell = cells[i];
+        var existingContent = cell.textContent.trim(); // Get the existing content of the cell
+
+        // Create an input field for editing
+        var input = document.createElement("input");
+        input.type = "text";
+        input.value = existingContent; // Set the value of the input field to the existing content
+        cell.textContent = ""; // Clear the cell's content
+        cell.appendChild(input); // Append the input field to the cell
+    }
     
     // Disable the edit button once clicked
     button.disabled = true;
@@ -46,27 +55,36 @@ function moveDown(button) {
 
 function saveRow(button) {
     var row = button.parentNode.parentNode;
-    var input = row.getElementsByTagName("input")[0];
-    var cell = row.getElementsByTagName("td")[0];
-    cell.innerHTML = input.value;
+    var inputs = row.getElementsByTagName("input");
+    var inputsLength = inputs.length;
+
+    // Loop through each input field in the row
+    for (var i = 0; i < inputsLength; i++) {
+        var input = inputs[0];
+        var cell = input.parentNode; // Get the parent td element
+        
+        // Set the cell's content to the input value
+        cell.textContent = input.value;
+    }
     
     // Enable the edit button after saving
     var editButton = row.querySelector("button[onclick='editRow(this)']");
     editButton.disabled = false;
 
-    //save table to server
+    // Save table to server
     saveTable();
 }
 
 function addStudent() {
     var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];
     var newRow = table.insertRow(-1);
-    var cell1 = newRow.insertCell(0);
-    var cell2 = newRow.insertCell(1);
-    newRow.setAttribute("data-value", table.rows.length);
-    cell1.innerHTML = "<input type='text'>";
-    cell2.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
-}     
+    var nameCell = newRow.insertCell(0);
+    var teamCell = newRow.insertCell(1);
+    var actionsCell = newRow.insertCell(2);
+    nameCell.innerHTML = "<input type='text'>";
+    teamCell.innerHTML = "<input type='text'>";
+    actionsCell.innerHTML = "<button class='small-btn' onclick='editRow(this)'>Edit</button> <button class='small-btn' onclick='removeRow(this)'>Remove</button> <button class='small-btn' onclick='moveUp(this)'>Up</button> <button class='small-btn' onclick='moveDown(this)'>Down</button> <button class='small-btn' onclick='saveRow(this)'>Save</button>";
+}
 
 function saveTable() {
     var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];
@@ -77,12 +95,32 @@ function saveTable() {
         saveRow(editButtons[i]);
     }
     
-     // Prepare data to send to server
+    // Prepare data to send to server
     var students = [];
     for (var i = 0; i < table.rows.length; i++) {
-        var studentName = table.rows[i].cells[0].innerText.trim();
-        var studentValue = table.rows[i].getAttribute("data-value"); // Retrieve the value associated with the student
-        students.push({ value: studentValue, label: studentName });
+        var studentData = {};
+        var row = table.rows[i];
+        
+        // Iterate over each cell in the row
+        for (var j = 0; j < row.cells.length; j++) {
+            studentData.index = i+1;
+            var cell = row.cells[j];
+            var cellData = cell.innerText.trim(); // Get the text content of the cell
+            
+            // Extract data based on the cell index
+            if (j === 0) {
+                studentData.name = cellData;
+            } else if (j === 1) {                
+                studentData.team = cellData;
+            }
+            // Add more conditions if you have additional cells with data
+            
+        }
+        // add student photo file source
+        studentData.photo = row.getAttribute("data-photo");
+        
+        // Push the student data to the array
+        students.push({ data: studentData });
     }
     
     // Send data to server using AJAX
@@ -92,21 +130,23 @@ function saveTable() {
         contentType: 'application/json',
         data: JSON.stringify({ students: students }),
         success: function(response) {
-        console.log("Students list saved successfully:", students);
+            console.log("Students list saved successfully:", students);
+            loadPageInformation(0);
         },
         error: function(xhr, status, error) {
-        console.error("Error saving students list:", error);
+            console.error("Error saving students list:", error);
         }
     });
 }
+
 
 function clearTable() {
     var table = document.getElementById("rosterTable").getElementsByTagName('tbody')[0];
     table.innerHTML = ""; // Clear all rows from the table
 }
 
-function resetTable() 
+function resetTable()
 {
     var reset = 1;
-    loadPageInformationOnStartUp(reset);
+    loadPageInformation(reset);
 }

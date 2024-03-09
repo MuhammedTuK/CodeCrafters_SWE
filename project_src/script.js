@@ -1,48 +1,31 @@
+/******************************Main Page Functions*****************************************/
+$(document).ready(function () {
 
-// jason call in a promise
-function getData(url) {
-    return new Promise((resolve, reject) => {
-        $.getJSON(url, function (data) {
-            resolve(data); // Resolve the promise with the data
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            reject(errorThrown); // Reject the promise if there's an error
-        });
-    });
+    checkBoxListenerAdd(); // add the checkbox listener event    
+    loadPageInformation(); // Call the primary function to load all of the page information
+});
+
+function loadPageInformation(reset)
+{ 
+    selctionColClear();
+    radioButtColClear();
+    SplitColClear();
+    loadEmptyImg();
+    clearTable();
+    document.getElementById('selectionSwitch').checked = false;
+
+    // Call functions to load the page information
+    loadStudentsListsInfo(reset);
 }
 
-function dropdownPopulate(value)
-{
-    $('#dropdownSel').append('<option value="' + value.value + '">' + value.label + '</option>');
-}
-
-function radioContainerPopulate(value)
-{
-    $('#radioContainer').append('<input type="radio" name="studentRadio" value="' + value.value + '">' + value.label + '<br>');
-}
-
-function pageListsPopulate(data)
-{
-    //dropdown header
-    $('#dropdownSel').append('<option value="0"> Select </option>'); 
-            
-    $.each(data.dropdownOptions, function (index, value) {  
-        //load the dropDownList
-        dropdownPopulate(value);
-        //load the radioContainer
-        radioContainerPopulate(value);
-        //load the table rows
-        tablePopulate(value);
-    });
-}
-
-function loadStudentsListformation(reset)
+function loadStudentsListsInfo(reset)
 {
     var url;
 
     if(reset == 1)
         url = "PageAPI.php?id=resetTable";
     else
-        url = "PageAPI.php?id=studentsList";
+        url = "PageAPI.php?id=studentsInfo";
 
     getData(url)
         .then(function(data) {
@@ -61,54 +44,50 @@ function loadStudentsListformation(reset)
         });
 }
 
-function radioContainerListenerAdd()
+function pageListsPopulate(data)
 {
-    // Get all radio buttons by their name
-    const radioButtons = document.querySelectorAll('input[name="studentRadio"]');
-    // Loop through each radio button and add an event listener
-    radioButtons.forEach(radioButton => {
-        radioButton.addEventListener('change', (event) => {
-            // When any radio button is selected, this code will execute
-            updateDropdownParagraph("radioSelection", event.target.value);
-        });
+    //dropdown header
+    $('#dropdownSel').append('<option value="0"> Select </option>'); 
+            
+    $.each(data.studentsInfoTable, function (index, value) {  
+        //load the dropDownList
+        dropdownPopulate(index, value);
+        //load the radioContainer
+        radioContainerPopulate(index, value);
+        //load the table rows
+        tablePopulate(index, value);
     });
 }
 
-function loadParagraphInformation(selected, outputSel){
-    var url = "PageAPI.php?id=paragraphInfo";
+function updateSelectedInfo(selctor, selected){
+    if (selctor == "dropdownSelection"){
+        $('#selctionMsg').empty(); // clear the paragraph information  
+        if(selected == 0) loadEmptyImg();   
+        // Call functions to load the page information           
+        loadSelectedInfo(selected, "dropdownInfo");
+    }
+    else if(selctor == "radioSelection"){
+        $('#radioMsg').empty(); // clear the paragraph information     
+        // Call functions to load the page information
+        loadSelectedInfo(selected, "radioInfo");
+    }
+}
+
+function loadSelectedInfo(selected, outputSel){
+    var url = "PageAPI.php?id=studentsInfo";
     $.getJSON(url, function (data) {
-        $.each(data.list, function (index, value) {
-            if(value.value == selected){
+        $.each(data.studentsInfoTable, function (index, value) {            
+            if((index+1) == selected){
                 if(outputSel == "dropdownInfo"){
-                    $('#selctionMsg').append(value.label);
+                    $('#selctionMsg').append(value.team);
                 }
                 else if(outputSel == "radioInfo"){
-                    $('#radioMsg').append(value.label);
+                    $('#radioMsg').append(value.team);
                 }
+                loadImgInformation(value.photo);
             }
         });
     });
-}
-
-function loadImgInformation(selected){
-    var imageElement = document.getElementById('studentImg');
-    imageElement.width = "300";
-    imageElement.height = "400";
-
-    if      (selected == 1) { imgSrc = "inputFiles/abdulatif.jpg"}
-    else if (selected == 2) { imgSrc = "inputFiles/dawsari.jpg"}
-    else if (selected == 3) { imgSrc = "inputFiles/johani.jpg"}
-    else if (selected == 4) { imgSrc = "inputFiles/otaibi.jpg"}
-    else if (selected == 5) { imgSrc = "inputFiles/shahrani.jpg"}
-    /*else if (selected == 6) { imgSrc = "inputFiles/tukhays.jpg"}*/
-    else if (selected == 7) { imgSrc = "inputFiles/zhrani.jpg"}            
-    else if (selected == 8) { imgSrc = "inputFiles/ghadi.jpg"}
-    else {
-        imgSrc = "inputFiles/empty.png"
-        imageElement.width = "300";
-        imageElement.height = "400";
-    }
-    imageElement.src = imgSrc;
 }
 
 function disableContainer(containerId) {
@@ -132,20 +111,81 @@ function selectionCtrl(checked)
     }
 }
 
-function updateDropdownParagraph(selctor, value){
-    if (selctor == "dropdownSelection"){
-        $('#selctionMsg').empty(); // clear the paragraph information     
-        // Call functions to load the page information           
-        loadParagraphInformation(value, "dropdownInfo");
-    }
-    else if(selctor == "radioSelection"){
-        $('#radioMsg').empty(); // clear the paragraph information     
-        // Call functions to load the page information
-        loadParagraphInformation(value, "radioInfo");
-    }
-    loadImgInformation(value);
+function checkBoxListenerAdd()
+{
+    // Get the checkbox element
+    const checkbox = document.getElementById('selectionSwitch');
+    // Add event listener for 'change' event
+    checkbox.addEventListener('change', function() {
+        selectionCtrl(this.checked);
+    });
 }
 
+// jason call in a promise
+function getData(url) {
+    return new Promise((resolve, reject) => {
+        $.getJSON(url, function (data) {
+            resolve(data); // Resolve the promise with the data
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            reject(errorThrown); // Reject the promise if there's an error
+        });
+    });
+}
+
+/******************************Col#1 Functions*****************************************/
+function dropdownPopulate(index, value)
+{
+    $('#dropdownSel').append('<option value="' + (index+1) + '">' + value.name + '</option>');
+}
+
+function selctionColClear()
+{
+    $('#dropdownSel').empty();// clear the dropdown list information information
+    $('#selctionMsg').empty(); // clear the paragraph information
+}
+
+/******************************Col#2 Functions*****************************************/
+function radioContainerPopulate(index, value)
+{
+    $('#radioContainer').append('<input type="radio" name="studentRadio" value="' + (index+1) + '">' + value.name + '<br>');
+}
+
+function radioContainerListenerAdd()
+{
+    // Get all radio buttons by their name
+    const radioButtons = document.querySelectorAll('input[name="studentRadio"]');
+    // Loop through each radio button and add an event listener
+    radioButtons.forEach(radioButton => {
+        radioButton.addEventListener('change', (event) => {
+            // When any radio button is selected, this code will execute
+            updateSelectedInfo("radioSelection", event.target.value);
+        });
+    });
+}
+
+function radioButtColClear()
+{
+    $('#radioMsg').empty(); // clear the paragraph information
+    $('#radioContainer').empty(); // clear the radio button container
+}
+
+/******************************Col#3 Functions*****************************************/
+function loadImgInformation(name){
+    var imageElement = document.getElementById('studentImg');
+    imageElement.width = "300";
+    imageElement.height = "400";
+    imageElement.src = "inputFiles/photos/" + name;
+}
+
+function loadEmptyImg()
+{
+    var imageElement = document.getElementById('studentImg');
+    imageElement.width = "300";
+    imageElement.height = "400";
+    imageElement.src = "inputFiles/photos/none.png";
+}
+
+/******************************Col#4 Functions*****************************************/
 function splitWords() {
     // Get the input value
     var inputText = document.getElementById('txtboxSplit').value;
@@ -170,30 +210,8 @@ function splitWords() {
     });
 }
 
-function loadPageInformationOnStartUp(reset)
+function SplitColClear()
 {
-    $('#selctionMsg').empty(); // clear the paragraph information
-    $('#radioMsg').empty(); // clear the paragraph information
-    $('#dropdownSel').empty();// clear the dropdown list information information
-    $('#radioContainer').empty(); // clear the radio button container
     $('#txtSplit').empty(); // clear the Split txtbox
     document.getElementById('txtboxSplit').value ="";
-    document.getElementById('selectionSwitch').checked = false;
-    loadImgInformation(0);
-    clearTable();
-
-    // Call functions to load the page information
-    loadStudentsListformation(reset);
 }
-
-$(document).ready(function () {
-
-    // Get the checkbox element
-    const checkbox = document.getElementById('selectionSwitch');
-    // Add event listener for 'change' event
-    checkbox.addEventListener('change', function() {
-        selectionCtrl(this.checked);
-    });
-    
-    loadPageInformationOnStartUp(); // Call the primary function to load all of the page information
-});
