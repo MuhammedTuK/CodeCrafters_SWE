@@ -5,38 +5,30 @@ $(document).ready(function () {
     loadPageInformation(); // Call the primary function to load all of the page information
 });
 
-function loadPageInformation(reset)
+function loadPageInformation()
 { 
     selctionColClear();
     radioButtColClear();
     SplitColClear();
     loadEmptyImg();
-    clearTable();
-    document.getElementById('selectionSwitch').checked = false;
+    document.getElementById('selectionSwitch').checked = true;
 
     // Call functions to load the page information
-    loadStudentsListsInfo(reset);
+    loadStudentsListsInfo();
 }
 
-function loadStudentsListsInfo(reset)
+function loadStudentsListsInfo()
 {
-    var url;
-
-    if(reset == 1)
-        url = "PageAPI.php?id=studentsInfoBkup";
-    else
-        url = "PageAPI.php?id=studentsInfo";
+    var url = "PageAPI.php?id=studentsInfo";
 
     getData(url)
         .then(function(data) {
             // Code to execute after the asynchronous call has completed successfully
             pageListsPopulate(data);
-            // if resetting, save the data
-            if(reset == 1) saveTable();
             //add radio container event listener
             radioContainerListenerAdd();
             //initialize selection box
-            selectionCtrl(false);
+            selectionCtrl(true);
         })
         .catch(function(error) {
             // Code to handle errors
@@ -54,8 +46,6 @@ function pageListsPopulate(data)
         dropdownPopulate(index, value);
         //load the radioContainer
         radioContainerPopulate(index, value);
-        //load the table rows
-        tablePopulate(index, value);
     });
 }
 
@@ -174,7 +164,7 @@ function loadImgInformation(name){
     var imageElement = document.getElementById('studentImg');
     imageElement.width = "300";
     imageElement.height = "400";
-    imageElement.src = "inputFiles/photos/" + name;
+    imageElement.src = "assets/photos/" + name;
 }
 
 function loadEmptyImg()
@@ -182,7 +172,7 @@ function loadEmptyImg()
     var imageElement = document.getElementById('studentImg');
     imageElement.width = "300";
     imageElement.height = "400";
-    imageElement.src = "inputFiles/photos/none.png";
+    imageElement.src = "assets/photos/none.png";
 }
 
 /******************************Col#4 Functions*****************************************/

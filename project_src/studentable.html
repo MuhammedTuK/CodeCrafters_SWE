@@ -1,0 +1,53 @@
+<!-- studentable.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information Database</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <header>
+        <img class="rit-logo" src="assets/img/rit.png" alt="RIT Logo">
+        <h1>Student Information DataBase</h1>
+        <hr>
+        <a class="return-button" href="index.html"><button>Return to Home Page</button></a>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="column-container">
+                <label>Editable Student Table</label>
+                <div class="column">
+                    <button onclick="addStudent()">Add Student</button>
+                    <button onclick="saveTable()">Save Table</button>
+                    <button onclick="resetTable()">Reset Table</button>
+    
+                    <table id="rosterTable">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Student Team</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows for students will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>    
+
+    <footer>
+        <p>CodeCrafter Webpage</p>
+    </footer>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="js/tableUtils.js"></script>
+</body>
+</html>

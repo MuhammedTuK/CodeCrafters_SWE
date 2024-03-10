@@ -1,0 +1,204 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5; /* Light gray background */
+    color: #333; /* Text color */
+}
+
+/**********************header***********************/
+h1 {
+    text-align: center;
+    color: #fe7700; /* RIT orange */
+    margin-bottom: 20px;
+}
+
+.rit-logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    max-width: 120px; /* Adjust the size of the logo */
+}
+
+hr {
+    border: none; /* Remove default border */
+    border-top: 3px double #686868; /* Add double border on the top */
+    margin-top: 80px; /* Adjust the margin as needed */
+}
+
+/**********************containers***********************/
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.column-container {
+    margin-bottom: 20px;
+}
+
+.column {
+    flex: 1;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+.disabled-container {
+    opacity: 0.5; /* Dim the container */
+    pointer-events: none; /* Disable pointer events */
+}
+
+/************checkbox***********************/
+.checkbox-container {
+    margin-left: 220px; /* Add a left margin */
+}
+
+/************image***********************/
+
+img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+}
+
+/************txt***********************/
+
+label {
+    font-weight: bold;
+    color: #666; /* Label color */
+}
+
+input[type="text"],
+select {
+    width: calc(100% - 22px); /* Full width - padding */
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+#selctionMsg,
+#radioMsg {
+    min-height: 20px; /* Adjust the height as needed */
+}
+
+.label-color {
+    color: #ff7f0f; /* RIT orange */
+    font-size: larger;
+}
+
+
+/**************buttons*****************/
+button {
+    background-color: #ff7700; /* RIT orange */
+    color: white;
+    border: none;
+    padding: 7px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+button:hover {
+    background-color: #b85900; /* Darker orange on hover */
+}
+
+.reload-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #ff7700;
+}
+
+.edit-button button{
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: #9f0000;
+}
+
+.edit-button button:hover {
+    background-color: #7b0000; /* Darker orange on hover */
+}
+
+.return-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+/*******************Table*******************/
+#rosterTable {
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Style for table headers */
+th {
+    background-color: #f2f2f2; /* Background color */
+    color: #333; /* Text color */
+    padding: 10px; /* Padding */
+    border-bottom: 2px solid #ccc; /* Bottom border */
+}
+
+#rosterTable tbody tr:not(:last-child) td {
+    border-bottom: 1px solid #ddd; /* Add a border-bottom to all rows except the last one */
+}
+
+/* Select the table cells and set border-right */
+td {
+    border-right: 1px solid black; /* Adjust the border color and thickness as needed */
+    padding: 0 10px; /* Adjust the horizontal padding as needed */
+}
+
+/* To prevent a border on the last column */
+td:last-child {
+    border-right: none;
+}
+
+.small-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 5px;
+    background-color: #df6800;
+}
+
+.remove-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    margin: 5px;
+    background-color: #9f0000;
+}
+
+/**************footer*****************/
+footer {
+    background-color: #e3e3e3; /* Gray background color */
+    padding: 10px;
+}
+
+footer p {
+    color: #7e7e7e; /* Text color */
+}
+
+footer hr {
+    border: none;
+    border-top: 1px solid #ddd; /* Horizontal line */
+    margin: 10px 0; /* Add some margin for spacing */
+}

@@ -2,16 +2,17 @@
 <html>
 <head>
     <title>Project Page</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
     <header>
-        <img class="rit-logo" src="inputFiles/rit.png" alt="RIT Logo">
+        <img class="rit-logo" src="assets/img/rit.png" alt="RIT Logo">
         <h1>Students Information Page</h1>
         <hr>
         <button class="reload-button" onclick="loadPageInformation()">Reload Page Information</button>
+        <a class="edit-button" href="studentable.html"><button>Edit Page Information</button></a>
     </header>
 
     <main>
@@ -60,30 +61,7 @@
                     <p id="txtSplit"></p>
                 </div>
             </div>
-    
-            <div class="column-container">
-                <label>Editable Student Table</label>
-                <div class="column">
-                    <button onclick="addStudent()">Add Student</button>
-                    <button onclick="saveTable()">Save Table</button>
-                    <button onclick="resetTable()">Reset Table</button>
-    
-                    <table id="rosterTable">
-                        <thead>
-                            <tr>
-                                <th>Student Name</th>
-                                <th>Student Team</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Rows for students will be added dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
-
     </main>
 
     <footer>
@@ -91,8 +69,7 @@
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-    <script src="script.js"></script>
-    <script src="tableUtils.js"></script>
+    <script src="js/script.js"></script>
 
 </body>
 </html>
