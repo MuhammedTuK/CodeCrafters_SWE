@@ -55,8 +55,6 @@ function getData(url) {
 /******************************Table Functions*****************************************/
 var actionCellString = "<button class='small-btn' onclick='editRow(this)'>Edit</button>" + 
                        "<button class='remove-btn' onclick='removeRow(this)'>Remove</button>" + 
-                       "<button class='small-btn' onclick='moveUp(this)'>Up</button>" +
-                       "<button class='small-btn' onclick='moveDown(this)'>Down</button>" + 
                        "<button class='small-btn' onclick='uploadPhoto(this)'>Upload Photo</button>" + 
                        "<button class='small-btn' onclick='saveRow(this,1)'>Save</button>";
 
@@ -72,6 +70,14 @@ function tablePopulate(index, value)
     teamCell.textContent = value.team;
     newRow.setAttribute("data-photo", value.photo);
     actionsCell.innerHTML = actionCellString;
+
+    // Add handle for dragging
+    var handleCell = newRow.insertCell(3);
+    handleCell.className = "handle"; // Add the handle class
+    handleCell.innerHTML = "&#9776;"; // Unicode for the handle symbol
+
+    // Enable drag-and-drop for the new row
+    makeRowDraggable(newRow);
 }
 
 function addStudent() {
@@ -84,18 +90,117 @@ function addStudent() {
     teamCell.innerHTML = "<input type='text'>";
     newRow.setAttribute("data-photo", "none.png");
     actionsCell.innerHTML = actionCellString;
+
+    // Add handle for dragging
+    var handleCell = newRow.insertCell(3);
+    handleCell.className = "handle"; // Add the handle class
+    handleCell.innerHTML = "&#9776;"; // Unicode for the handle symbol
+
+    // Enable drag-and-drop for the new row
+    makeRowDraggable(newRow);
     
     // Disable the edit button for the newly added row
     var editButton = newRow.querySelector("button[onclick='editRow(this)']");
     editButton.disabled = true;
 }
 
+function makeRowDraggable(row) {
+    row.draggable = true; // Enable dragging for the row
+
+    // Add event listeners for drag events
+    row.addEventListener('dragstart', function(e) {
+        e.dataTransfer.setData('text/plain', ''); // Set data to be dragged
+        e.currentTarget.classList.add('dragging'); // Add dragging class to the dragged row
+    });
+
+    row.addEventListener('dragend', function(e) {
+        e.currentTarget.classList.remove('dragging'); // Remove dragging class after drag ends
+    });
+}
+
+// Apply draggable behavior to all rows in the table
+var rows = document.getElementById('rosterTable').querySelectorAll('tbody tr');
+rows.forEach(makeRowDraggable);
+
+// Add event listener for drop event on the table
+document.getElementById('rosterTable').addEventListener('drop', function(e) {
+    e.preventDefault();
+    var draggedRow = document.querySelector('.dragging'); // Get the dragged row
+    if (draggedRow) {
+        var parentTable = draggedRow.parentNode;
+        var targetRow = e.target.closest('tr'); // Get the target row where the drop occurred
+        if (targetRow && targetRow !== draggedRow) {
+            var nextSibling = targetRow.nextSibling; // Get the next sibling of the target row
+            var previousSibling = targetRow.previousSibling; // Get the previous sibling of the target row
+
+            // Check if the target row is the first row
+            if (!previousSibling) {
+                parentTable.insertBefore(draggedRow, targetRow); // Move the dragged row to the top of the table
+            }
+            // Check if the target row is the last row
+            else if (!nextSibling) {
+                parentTable.appendChild(draggedRow); // Move the dragged row to the bottom of the table
+            }
+            // Otherwise, insert the dragged row between the target row and its next sibling
+            else {
+                var rect = targetRow.getBoundingClientRect(); // Get the target row's bounding rectangle
+                var offsetY = e.clientY - rect.top; // Calculate the vertical distance from the top of the target row
+                var heightRatio = offsetY / rect.height; // Calculate the ratio of offsetY to the target row's height
+                if (heightRatio < 0.5) {
+                    parentTable.insertBefore(draggedRow, targetRow); // Move the dragged row above the target row
+                } else {
+                    parentTable.insertBefore(draggedRow, nextSibling); // Move the dragged row below the target row
+                }
+            }
+        }
+        // Save the table after dropping the row
+        saveTable();
+    }
+});
+
+
+// Add event listener for dragover event on the table
+document.getElementById('rosterTable').addEventListener('dragover', function(e) {
+    e.preventDefault();
+    var draggedRow = document.querySelector('.dragging'); // Get the dragged row
+    if (draggedRow) {
+        var parentTable = draggedRow.parentNode;
+        var targetRow = e.target.closest('tr'); // Get the target row where the dragover occurred
+        if (targetRow && targetRow !== draggedRow) {
+            var nextSibling = targetRow.nextSibling; // Get the next sibling of the target row
+            var previousSibling = targetRow.previousSibling; // Get the previous sibling of the target row
+
+            // Check if the target row is the first row
+            if (!previousSibling) {
+                parentTable.insertBefore(draggedRow, targetRow); // Move the dragged row to the top of the table
+            }
+            // Check if the target row is the last row
+            else if (!nextSibling) {
+                parentTable.appendChild(draggedRow); // Move the dragged row to the bottom of the table
+            }
+            // Otherwise, insert the dragged row between the target row and its next sibling
+            else {
+                var rect = targetRow.getBoundingClientRect(); // Get the target row's bounding rectangle
+                var offsetY = e.clientY - rect.top; // Calculate the vertical distance from the top of the target row
+                var heightRatio = offsetY / rect.height; // Calculate the ratio of offsetY to the target row's height
+                if (heightRatio < 0.5) {
+                    parentTable.insertBefore(draggedRow, targetRow); // Move the dragged row above the target row
+                } else {
+                    parentTable.insertBefore(draggedRow, nextSibling); // Move the dragged row below the target row
+                }
+            }
+        }
+    }
+});
+
+
+
 function editRow(button) {
     var row = button.parentNode.parentNode;
     var cells = row.getElementsByTagName("td");
     
     // Loop through each cell in the row
-    for (var i = 0; i < (cells.length-1); i++) {
+    for (var i = 0; i < (cells.length-2); i++) {
         var cell = cells[i];
         var existingContent = cell.textContent.trim(); // Get the existing content of the cell
 
@@ -130,6 +235,17 @@ function moveDown(button) {
     if (nextRow) {
         row.parentNode.insertBefore(nextRow, row);
     }
+}
+
+// Function to initialize sortable rows
+function initSortableRows() {
+    $("#rosterTable tbody").sortable({
+        axis: "y", // Allow sorting only vertically
+        handle: ".handle", // Selector for the handle element
+        update: function(event, ui) {
+            saveTable(); // Save the table after sorting
+        }
+    });
 }
 
 function saveRow(button, save_all) {
@@ -279,5 +395,6 @@ function resetTable()
     var reset = 1;
     loadPageInformation(reset);
     resetPhotosDirectory();
+    initSortableRows();
 }
 

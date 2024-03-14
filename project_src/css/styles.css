@@ -187,6 +187,10 @@ td:last-child {
     background-color: #9f0000;
 }
 
+.handle {
+    cursor: move; /* Set cursor to indicate draggable element */
+}
+
 /**************footer*****************/
 footer {
     background-color: #e3e3e3; /* Gray background color */
